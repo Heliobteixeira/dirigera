@@ -8,8 +8,7 @@ from src.dirigera.mcp_server.server import (
     get_device,
     control_light,
     read_sensor,
-    _load_config,
-    CONFIG_PATH,
+    _get_hub,
 )
 from src.dirigera.hub.abstract_smart_home_hub import FakeDirigeraHub
 from src.dirigera.devices.light import dict_to_light
@@ -236,8 +235,7 @@ def test_read_motion_sensor(mock_get_hub):
     assert result["battery_percentage"] == 95
 
 
-def test_load_config_missing_file():
-    with patch("src.dirigera.mcp_server.server.CONFIG_PATH") as mock_path:
-        mock_path.exists.return_value = False
-        with pytest.raises(FileNotFoundError):
-            _load_config()
+def test_get_hub_missing_env_vars():
+    with patch.dict("os.environ", {}, clear=True):
+        with pytest.raises(ValueError, match="DIRIGERA_TOKEN"):
+            _get_hub()

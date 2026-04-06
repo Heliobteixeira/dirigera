@@ -1,36 +1,22 @@
-import configparser
 import json
-from pathlib import Path
+import os
 from typing import Optional
 
 from mcp.server.fastmcp import FastMCP
 
 import dirigera
 
-CONFIG_PATH = Path.home() / ".dirigera" / "config.ini"
-
 mcp = FastMCP("dirigera", instructions="Control IKEA Dirigera Smart Home Hub devices.")
 
 
-def _load_config() -> dict:
-    if not CONFIG_PATH.exists():
-        raise FileNotFoundError(
-            f"Config file not found at {CONFIG_PATH}. "
-            "Create it with a [dirigera] section containing 'token' and 'ip_address'."
-        )
-    parser = configparser.ConfigParser()
-    parser.read(CONFIG_PATH)
-    if "dirigera" not in parser:
-        raise ValueError("Config file must contain a [dirigera] section.")
-    section = parser["dirigera"]
-    if "token" not in section or "ip_address" not in section:
-        raise ValueError("Config file must contain 'token' and 'ip_address' fields.")
-    return {"token": section["token"], "ip_address": section["ip_address"]}
-
-
 def _get_hub() -> dirigera.Hub:
-    config = _load_config()
-    return dirigera.Hub(token=config["token"], ip_address=config["ip_address"])
+    token = os.environ.get("DIRIGERA_TOKEN")
+    ip_address = os.environ.get("DIRIGERA_IP_ADDRESS")
+    if not token or not ip_address:
+        raise ValueError(
+            "Set DIRIGERA_TOKEN and DIRIGERA_IP_ADDRESS environment variables."
+        )
+    return dirigera.Hub(token=token, ip_address=ip_address)
 
 
 def _device_summary(device) -> dict:

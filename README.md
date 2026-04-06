@@ -701,12 +701,11 @@ pip install dirigera[mcp]
 
 ### Configuration
 
-Create a config file at `~/.dirigera/config.ini`:
+Set the required environment variables:
 
-```ini
-[dirigera]
-token = your-token-here
-ip_address = 192.168.1.100
+```bash
+export DIRIGERA_TOKEN="your-token-here"
+export DIRIGERA_IP_ADDRESS="192.168.1.100"
 ```
 
 You can generate a token using:
@@ -728,7 +727,11 @@ Add this to your Claude Desktop config (`claude_desktop_config.json`):
 {
   "mcpServers": {
     "dirigera": {
-      "command": "dirigera-mcp"
+      "command": "dirigera-mcp",
+      "env": {
+        "DIRIGERA_TOKEN": "your-token-here",
+        "DIRIGERA_IP_ADDRESS": "192.168.1.100"
+      }
     }
   }
 }
