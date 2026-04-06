@@ -688,3 +688,57 @@ All of these tests are also run when a PR is openend (and the test run is trigge
 The MIT License (MIT)
 
 Copyright (c) 2023 Leggin
+
+## MCP Server
+
+The library includes an optional MCP (Model Context Protocol) server that exposes Dirigera hub operations as tools for AI agents (e.g., Claude Desktop, VS Code Copilot).
+
+### Installation
+
+```bash
+pip install dirigera[mcp]
+```
+
+### Configuration
+
+Create a config file at `~/.dirigera/config.ini`:
+
+```ini
+[dirigera]
+token = your-token-here
+ip_address = 192.168.1.100
+```
+
+You can generate a token using:
+```bash
+generate-token <Dirigera ip-address>
+```
+
+### Running the MCP Server
+
+```bash
+dirigera-mcp
+```
+
+### Claude Desktop Configuration
+
+Add this to your Claude Desktop config (`claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "dirigera": {
+      "command": "dirigera-mcp"
+    }
+  }
+}
+```
+
+### Available Tools
+
+| Tool | Description |
+|------|-------------|
+| `list_devices` | List all devices registered in the hub (id, name, type, room) |
+| `get_device` | Get detailed information about a specific device by ID |
+| `control_light` | Control a light: set power (on/off), brightness (1-100), color temperature |
+| `read_sensor` | Read data from environment sensors (temperature, humidity) or motion sensors |

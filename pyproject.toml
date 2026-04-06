@@ -39,9 +39,11 @@ classifiers = [
 
 [project.optional-dependencies]
 dev = ["black", "pytest"]
+mcp = ["mcp >= 1.0.0"]
 
 [project.scripts]
 generate-token = "dirigera.hub.auth:main"
+dirigera-mcp = "dirigera.mcp_server:main"
 
 [project.urls]
 Homepage = "https://github.com/Leggin/dirigera"
